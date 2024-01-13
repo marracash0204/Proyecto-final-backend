@@ -1,0 +1,29 @@
+<form action="/profile" method="GET">
+  <button type="submit">Volver al profile</button>
+</form>
+
+<form action="/modifyProduct" method="GET">
+  <button type="submit">Modificar Productos</button>
+</form>
+
+<form action="/addproduct" method="POST">
+  <input type="text" name="title" placeholder="title" required>
+  <input type="text" name="description" placeholder="description" required>
+  <input type="number" name="price" placeholder="price" required>
+  <input type="text" name="code" placeholder="code" required>
+  <input type="number" name="stock" placeholder="stock" required>
+  <button type="submit">Agregar Producto</button>
+</form>
+
+
+<ul>
+  {{#each products}}
+  <li>
+    -Title: {{this.title}}<br>
+    -Description: {{this.description}}<br>
+    -Price: {{this.price}}<br>
+    -Code: {{this.code}}<br>
+    -Stock: {{this.stock}}
+  </li>
+  {{/each}}
+</ul>

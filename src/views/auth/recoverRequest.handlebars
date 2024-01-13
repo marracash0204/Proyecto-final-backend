@@ -1,0 +1,15 @@
+ <h1>Recuperación de Contraseña</h1>
+  
+  {{#if success}}
+    <p>{{success}}</p>
+  {{/if}}
+  
+  {{#if error}}
+    <p style="color: red;">{{error}}</p>
+  {{/if}}
+
+  <form action="/api/auth/recover-request" method="post">
+  <label for="email">Correo electrónico:</label>
+  <input type="email" name="email" placeholder="Correo electrónico" required>
+  <button type="submit">Enviar correo de recuperación</button>
+</form>

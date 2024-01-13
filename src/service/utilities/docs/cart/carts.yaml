@@ -1,0 +1,318 @@
+paths:
+  /api/carts:
+    get:
+      summary: Obtiene todos los carritos
+      tags:
+        - carts
+      responses:
+        "200":
+          description: Lista de carritos
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Cart"
+        "500":
+          description: Error al obtener los carritos
+    post:
+      summary: Crea un nuevo carrito
+      tags:
+        - carts
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/requestBodies/createCart"
+      responses:
+        "200":
+          description: Carrito creado con éxito
+          content:
+            application/json:
+              example:
+                message: Carrito creado con exito
+                _Id: ObjectId
+                products: []
+
+        "500":
+          description: Error al crear un nuevo carrito
+          content:
+            application/json:
+              example:
+                error: Error interno del servidor al crear el carrito
+
+  /api/carts/{cid}:
+    get:
+      summary: Obtiene un carrito por ID
+      tags:
+        - carts
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: ID del carrito a obtener
+          schema:
+            $type: String
+      responses:
+        "200":
+          description: Detalles del carrito
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Cart"
+        "500":
+          description: Error al obtener el carrito
+    delete:
+      summary: Elimina los productos de un carrito por ID
+      tags:
+        - carts
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: ID del carrito a eliminar
+          schema:
+            $type: String
+      responses:
+        "200":
+          description: Productos en el carrito eliminado con éxito
+        "500":
+          description: Error al eliminar Productos en el carrito
+
+  /add-to-cart/{productId}:
+    post:
+      summary: Agrega un producto al carrito del usuario autenticado por ID (Debes estar logueado para usar esta opción)
+      tags:
+        - carts
+      parameters:
+        - name: productId
+          in: path
+          required: true
+          description: ID del producto a agregar al carrito
+          schema:
+            type: string
+
+      responses:
+        "200":
+          description: Producto agregado al carrito con éxito, seras redirigido a la vista de handlebar para agregar productos al carrito.
+          content:
+            application/json:
+              example:
+                productId: objectId
+                message: Producto agregado al carrito satisfactoriamente, seras redirigido a la vista de handlebar para agregar productos al carrito.
+
+        "500":
+          description: Error al agregar producto al carrito
+          content:
+            application/json:
+              example:
+                error: Error interno del servidor al agregar producto al carrito
+  /cart/{cid}/purchase:
+    post:
+      summary: Finaliza la compra del carrito por ID
+      tags:
+        - carts
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: ID del carrito a finalizar la compra
+          schema:
+            type: string
+
+      responses:
+        "200":
+          description: Compra finalizada con éxito, seras redirigido a la vista de handlebar para recibir el ticket de compra
+          content:
+            application/json:
+              example:
+                message: Compra finalizada con éxito, ticket generado
+
+        "500":
+          description: Error al finalizar la compra, no tiene productos en el carrito o hubo un fallo en el servicio
+          content:
+            application/json:
+              example:
+                error: Error interno del servidor al finalizar la compra, no tiene productos en el carrito o hubo un fallo en el servicio
+  /delete-product-stock/{prodId}:
+    post:
+      summary: Elimina un producto por ID del stock (Solo usuarios "Premium" o "Admin", el usuario premium solo podra eliminar productos que le pertenezcan)
+      tags:
+        - carts
+      parameters:
+        - name: prodId
+          in: path
+          required: true
+          description: ID del producto a eliminar
+          schema:
+            type: string
+
+      responses:
+        "200":
+          description: Producto eliminado con éxito, sera redirigido a la vista de handlebar para eliminar productos.
+          content:
+            application/json:
+              example:
+                message: Producto eliminado con éxito, sera redirigido a la vista de handlebar para eliminar productos.
+
+        "500":
+          description: Error al eliminar el producto
+          content:
+            application/json:
+              example:
+                error: Error interno del servidor al eliminar el producto
+
+components:
+  schemas:
+    Products:
+      type: object
+      properties:
+        product:
+          type: object
+          properties:
+            _id:
+              type: String
+              description: ID del producto
+            title:
+              type: String
+              description: Nombre del producto
+            description:
+              type: String
+              description: Descripción del producto
+            price:
+              type: number
+              description: Precio del producto
+            code:
+              type: String
+              description: Código del producto
+            stock:
+              type: number
+              description: Stock del producto
+            owner:
+              $ref: "#/components/schemas/userSchema"
+          example:
+            products:
+              _id: ObjectId
+              title: Product 1
+              description: Product 1 description
+              price: 20
+              code: 12345
+              stock: 10
+              owner: ObjectId
+
+    userSchema:
+      type: object
+      properties:
+        _id:
+          type: String
+          description: ID del usuario
+        first_name:
+          type: String
+          description: Nombre del usuario
+        last_name:
+          type: String
+          description: Apellido del usuario
+        email:
+          type: String
+          unique: true
+          description: Email del usuario
+        age:
+          type: number
+          description: Edad del usuario
+        password:
+          type: String
+          description: Contraseña del usuario
+        cart:
+          $ref: "#/components/schemas/Cart"
+          description: Carrito del usuario
+        rol:
+          type: String
+          description: Rol del usuario
+        githubId:
+          type: String
+          description: ID de GitHub del usuario
+        resetToken:
+          type: String
+          description: Token de reseteo de contraseña
+        resetTokenExpiration:
+          type: Date
+          description: Fecha de expiración del token de reseteo de contraseña
+      example:
+        _id: ObjectId
+        first_name: John
+        last_name: Doe
+        email: jhon@jhon.com
+        age: 20
+        password: a123456
+        cart: ObjectId
+        rol: user
+        githubId: 123456
+        resetToken: 123456
+        resetTokenExpiration: 2021-05-05T03:00:00.000+00:00
+    Cart:
+      type: object
+      properties:
+        _id:
+          type: String
+          description: ID del carrito
+        products:
+          type: object
+          items:
+            $ref: "#/components/schemas/Products"
+        quantity:
+          type: number
+          description: Cantidad del producto
+      example:
+        _id: ObjectId
+        products:
+          product: ObjectId
+          quantity: 2
+  requestBodies:
+    updateProducts:
+      type: object
+      properties:
+        _id:
+          type: String
+          description: ID del producto
+        title:
+          type: String
+          description: Nombre del producto
+        description:
+          type: String
+          description: Descripción del producto
+        price:
+          type: number
+          description: Precio del producto
+        code:
+          type: String
+          description: Código del producto
+        stock:
+          type: number
+          description: Stock del producto
+        owner:
+          $ref: "#/components/schemas/userSchema"
+      example:
+        title: Product 1
+        description: Product 1 description
+        price: 20
+        code: A12
+        stock: 10
+    createCart:
+      type: object
+      properties:
+        _id:
+          type: String
+          description: ID del carrito
+        products:
+          type: object
+          items:
+            $ref: "#/components/schemas/Products"
+        quantity:
+          type: number
+          description: Cantidad del producto
+      example:
+        _id: ObjectId
+        products:
+          product: ObjectId
+          quantity: 2

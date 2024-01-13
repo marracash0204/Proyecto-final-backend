@@ -1,0 +1,17 @@
+<h1>Restablecer Contraseña</h1>
+  
+  {{#if success}}
+    <p>{{success}}</p>
+  {{/if}}
+  
+  {{#if error}}
+    <p style="color: red;">{{error}}</p>
+  {{/if}}
+
+  <form action="/api/recover-reset/{{token}}" method="post">
+    <label for="newPassword">Nueva contraseña:</label>
+    <input type="password" name="newPassword" placeholder="Nueva contraseña" required>
+    <label for="confirmPassword">Confirmar contraseña:</label>
+    <input type="password" name="confirmPassword" placeholder="Confirmar contraseña" required>
+    <button type="submit">Restablecer contraseña</button>
+  </form>

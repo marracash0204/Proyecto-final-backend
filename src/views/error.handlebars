@@ -1,0 +1,27 @@
+{{#if noProductsToDelete}}
+<h2>No hay productos que eliminar en el carrito</h2>
+{{else if noProducts}}
+<h2>No fue posible hacer su ticket, no hay productos agregados al carrito</h2>
+{{else if sameProduct}}
+<h2>No puedes agregar tu propio producto al carrito.</h2>
+{{else if emailNotFound}}
+<h2>Correo no encontrado en nuestros registros. Intenta nuevamente.</h2>
+<form action="/recover-request" method="GET">
+  <button type="submit">Regresar a la página de recuperación</button>
+</form>
+{{else if sameAsOldPassword}}
+<h2>La contraseña no puede ser igual a la anterior, intente nuevamente</h2>
+<form action='/api/recover-reset/{{token}}' method="GET">
+  <button type="submit">Regresar a la página de restablecimiento</button>
+</form>
+
+{{else if notSamePass}}
+<h2>Las contraseñas no coinciden, intentelo nuevamente. </h2>
+<form action="/recover-request" method="GET">
+  <button type="submit">Regresar a la página de recuperación</button>
+</form>
+{{else if tokenExpired}}
+<h2>El token a expirado por favor vuelve a intentar restablecer tu contraseña <a href="/recover-request">Aqui</a></h2>
+{{else}}
+<h2>Producto sin stock, por favor regresa para agregar otros productos</h2>
+{{/if}}

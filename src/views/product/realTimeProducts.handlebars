@@ -1,0 +1,30 @@
+<div>
+    <h1>Productos en tiempo real</h1>
+    <ul id="product-list">
+        {{#each products}}
+        <li>
+            ID: {{this.id}} <br>
+            Title: {{this.title}} <br>
+            Description: {{this.description}} <br>
+            Price: {{this.price}} <br>
+            Code: {{this.code}} <br>
+            Stock: {{this.stock}}
+        </li>
+        {{/each}}
+    </ul>
+</div>
+<div>
+    <h2>¿Desea eliminar o editar un producto?</h2>
+    </form>
+    <form action="/modifyProduct" method="GET">
+        <button type="submit">Editar y/o eliminar productos</button>
+    </form>
+
+    <h2>¿Desea agregar un producto?</h2>
+    <form action="/addproduct" method="GET">
+        <button type="submit">Agregar productos</button>
+    </form>
+</div>
+
+<script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+<script src="/js/realTimeProducts.js"></script>

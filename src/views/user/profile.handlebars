@@ -1,0 +1,62 @@
+<h2>
+  Hola {{user.first_name}} {{user.last_name}}
+</h2>
+
+<p>
+  <strong>Email:</strong> {{user.email}} <br />
+  <strong>Edad:</strong> {{user.age}}<br />
+  <strong>Rol:</strong> {{user.rol}}
+</p>
+
+<form action="/api/users/{{userId}}/documents" method="POST" enctype="multipart/form-data">
+  <label for="file">Seleccionar archivo:</label>
+  <input type="file" name="documents" accept=".pdf, .doc, .docx">
+  <button type="submit">Subir archivo</button>
+</form>
+
+
+<form action="/api/users/{{userId}}/documents" method="POST" enctype="multipart/form-data">
+  <label for="profileImage">Seleccionar imagen de perfil:</label>
+  <input type="file" name="profile" accept="image/*">
+  <button type="submit">Subir imagen de perfil</button>
+</form>
+
+<form action="/api/users/{{userId}}/documents" method="POST" enctype="multipart/form-data">
+  <label for="products">Seleccionar una imagen de producto:</label>
+  <input type="file" name="product" accept="image/*">
+  <button type="submit">Subir imagen de producto</button>
+</form>
+
+<hr>
+
+
+
+
+
+<form action="/api/users/premium/{{userId}}" method="GET">
+  <button type="submit">Cambiar de rol</button>
+</form>
+
+<h3>Carrito</h3>
+{{#if user.cart.products}}
+<ul>
+  {{#each user.cart.products}}
+  <li>
+    <strong>Id del producto:</strong> {{{this.product._id}}}<br />
+    <strong>Nombre del producto:</strong> {{{this.product.title}}}<br />
+    <strong>Precio del producto:</strong> {{{this.product.price}}}<br />
+    <strong>Cantidad:</strong> {{this.quantity}}
+  </li>
+  {{/each}}
+</ul>
+{{else}}
+<p>No tienes productos en tu carrito.</p>
+{{/if}}
+
+<p><strong>Id del carrito:</strong>{{cartId}}</p>
+
+<form action="/cart/{{cartId}}/purchase" method="POST">
+  <button type="submit">Realizar la compra</button>
+</form><br>
+
+<button><a href="http://localhost:3001/products">Ver todos los productos</a></button>

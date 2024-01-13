@@ -1,0 +1,41 @@
+<form action="/addproduct" method="GET">
+  <button type="submit">Agregar productos</button>
+</form>
+<form action="/profile" method="GET">
+  <button type="submit">Volver al profile</button>
+</form>
+<ul>
+  {{#each allProducts}}
+  <li>
+    <strong>- Id:</strong> {{this.id}}</br>
+    <strong>- Title:</strong> {{this.title}}</br>
+    <strong>- Description:</strong> {{this.description}}</br>
+    <strong>- Price:</strong> {{this.price}}</br>
+    <strong>- Code:</strong> {{this.code}}</br>
+    <strong>- Stock:</strong> {{this.stock}}</br>
+    <strong>- Owner:</strong> {{this.owner}}</br>
+
+    <form action="/modify-product/{{this.id}}" method="POST">
+      <label for="title"><strong>Nuevo título:</strong></label>
+      <input type="text" name="title" placeholder="Nuevo título" required><br>
+
+      <label for="description"><strong>Nueva descripción:</strong></label>
+      <textarea name="description" placeholder="Nueva descripción" required></textarea><br>
+
+      <label for="price"><strong>Nuevo precio:</strong></label>
+      <input type="text" name="price" placeholder="Nuevo precio" required><br>
+
+      <label for="code"><strong>Nuevo código:</strong></label>
+      <input type="text" name="code" placeholder="Nuevo código" required><br>
+
+      <label for="stock"><strong>Nuevo stock:</strong></label>
+      <input type="text" name="stock" placeholder="Nuevo stock" required><br>
+
+      <button type="submit">Editar</button>
+    </form>
+    <form action="/delete-product-stock/{{this.id}}" method="POST">
+      <button type="submit">Eliminar Producto</button>
+    </form>
+  </li>
+  {{/each}}
+</ul>

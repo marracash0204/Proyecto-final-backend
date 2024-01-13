@@ -1,0 +1,22 @@
+<h1>Compra Finalizada</h1>
+
+{{#if result}}
+<p>Código del Ticket: {{result.code}}</p>
+<p>Fecha de compra: {{result.amount}} {{formatDate result.purchase_datetime}}</p>
+<p>Monto Total: ${{result.purchaser}}</p>
+<p>Email del comprador: {{purchaser}}</p>
+
+
+{{#if result.failedProductIds.length}}
+<h2>Productos no procesados:</h2>
+<ul>
+  {{#each result.failedProductIds}}
+  <li>{{this}}</li>
+  {{/each}}
+</ul>
+{{/if}}
+{{/if}}
+
+<form action="/profile" method="get">
+  <button type="submit">Volver al profile</button>
+</form>

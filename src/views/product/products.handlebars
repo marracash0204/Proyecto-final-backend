@@ -1,0 +1,62 @@
+<form action="/logout" method="post">
+  <button type="submit">Cerrar sesión</button>
+</form>
+
+<form action="/profile" method="get">
+  <button type="submit">Ver los productos en el carrito</button>
+</form>
+
+
+{{#if (eq user.rol "admin")}}
+<h1>¡Bienvenido administrador! Estos son los productos disponibles</h1>
+<form action="/addproduct" method="GET">
+  <button type="submit">Agregar productos</button>
+</form>
+<form action="/modifyProduct" method="GET">
+  <button type="submit">Modificar Productos</button>
+</form>
+
+{{else if (eq user.rol "premium")}}
+<h1>¡Hola {{{user.first_name}}} {{{user.last_name}}}! Estos son los productos disponibles</h1>
+<form action="/addproduct" method="GET">
+  <button type="submit">Agregar productos</button>
+</form>
+<form action="/modifyProduct" method="GET">
+  <button type="submit">Modificar Productos</button>
+</form>
+{{else}}
+<h1>¡Hola {{{user.first_name}}} {{{user.last_name}}}
+  ! Estos son los productos disponibles</h1>
+{{/if}}
+<ul>
+  {{#each products}}
+  <li>
+    ID: {{this.id}} <br>
+    Title: {{this.title}} <br>
+    Description: {{this.description}} <br>
+    Price: {{this.price}} <br>
+    Code: {{this.code}} <br>
+    Stock: {{this.stock}}<br>
+    Owner: {{this.owner}}
+    <form action="/add-to-cart/{{this.id}}" method="POST">
+      <button type="submit">Agregar al Carrito</button>
+    </form>
+    <form action="/delete-product/{{this.id}}" method="POST">
+      <button type="submit">Eliminar producto del carrito</button>
+    </form>
+
+  </li>
+  {{/each}}
+</ul>
+
+{{#if totalPages}}
+<div class="pagination">
+  {{#if (gt currentPage 1)}}
+  <a href="/products?page={{subtract currentPage 1}}" class="page-link">Anterior</a>
+  {{/if}}
+
+  {{#if (lt currentPage totalPages)}}
+  <a href="/products?page={{add currentPage 1}}" class="page-link">Siguiente</a>
+  {{/if}}
+</div>
+{{/if}}
