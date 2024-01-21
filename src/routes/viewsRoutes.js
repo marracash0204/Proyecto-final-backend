@@ -3,10 +3,15 @@ import { productsManager } from "../service/productsManager.js";
 import { messageManager } from "../service/messageManager.js";
 import { cartManager } from "../service/cartsManager.js";
 import passport from "passport";
-import { isUser, isAdminOrPremium } from "../middlewares/autMiddleware.js";
+import {
+  isUser,
+  isAdminOrPremium,
+  isAdmin,
+} from "../middlewares/autMiddleware.js";
 import { generateMockProducts } from "../service/mockingModule.js";
 import logger from "../service/utilities/logger.js";
 import { userModel } from "../models/userModel.js";
+import { getAllUsersService } from "../service/userService.js";
 
 const cartsManager = new cartManager();
 const messagesManager = new messageManager();
@@ -143,7 +148,7 @@ router.get("/signup", async (req, res) => {
   }
 
   res.render("auth/signup");
-}); 
+});
 
 router.get("/login", async (req, res) => {
   if (req.isAuthenticated()) {
@@ -191,6 +196,18 @@ router.get("/mockingProducts", (req, res) => {
   } catch (error) {
     logger.error("Error al generar productos ficticios:", error);
     res.status(500).json({ error: "Error interno del servidor" });
+  }
+});
+
+router.get("/admin/users", isAdmin, async (req, res) => {
+  try {
+    const users = await getAllUsersService();
+    res.render("modify", { users });
+  } catch (error) {
+    console.error("Error al obtener usuarios:", error);
+    res
+      .status(500)
+      .render("error", { error: "Error interno al obtener usuarios." });
   }
 });
 

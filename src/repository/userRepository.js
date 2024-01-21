@@ -29,16 +29,22 @@ const generateAndStoreToken = async (email) => {
       console.log(
         `No hay usuarios con el correo ${email} disponibles para actualizar.`
       );
-      return null;
+      return {
+        success: false,
+        message: "Usuario no encontrado para actualizar token.",
+      };
     }
 
-    return token;
+    return { success: true, token };
   } catch (error) {
     console.error(
       "Error al generar token y almacenar en la base de datos:",
       error
     );
-    throw error;
+    return {
+      success: false,
+      message: "Error interno al generar y almacenar token.",
+    };
   }
 };
 
@@ -58,35 +64,44 @@ const resetPassword = async (token, newPassword) => {
         console.error(
           "La nueva contraseña no puede ser igual a la contraseña actual."
         );
-        return false;
+        return {
+          success: false,
+          message:
+            "La nueva contraseña no puede ser igual a la contraseña actual.",
+        };
       }
+
       const hashedPassword = await bcrypt.hash(newPassword, 10);
 
       user.password = hashedPassword;
-
       user.resetToken = undefined;
       user.resetTokenExpiration = undefined;
 
       await user.save();
 
-      return true;
+      return { success: true };
     } else {
-      return false;
+      return { success: false, message: "Token no válido o ha expirado." };
     }
   } catch (error) {
     console.error("Error al restablecer la contraseña:", error);
-    throw error;
+    return {
+      success: false,
+      message: "Error interno al restablecer la contraseña.",
+    };
   }
 };
 
 const getUserByToken = async (token) => {
   try {
     const user = await userModel.findOne({ resetToken: token });
-
     return user;
   } catch (error) {
     console.error("Error al obtener usuario por token:", error);
-    throw error;
+    return {
+      success: false,
+      message: "Error interno al obtener usuario por token.",
+    };
   }
 };
 
@@ -100,7 +115,10 @@ const isTokenExpired = async (token) => {
     return !user;
   } catch (error) {
     console.error("Error al verificar la expiración del token:", error);
-    throw error;
+    return {
+      success: false,
+      message: "Error interno al verificar la expiración del token.",
+    };
   }
 };
 
@@ -134,12 +152,77 @@ async function getUserById(userId) {
   try {
     const user = await userModel.findById(userId);
     if (!user) {
-      return { success: false, message: "usuario no encontrado" };
+      return { success: false, message: "Usuario no encontrado." };
     }
-    return user;
+    return { success: true, user };
   } catch (error) {
-    console.error("error al obtener el id");
-    return { success: false, message: "Error al obtener el id de usuario" };
+    console.error("Error al obtener usuario por ID:", error);
+    return {
+      success: false,
+      message: "Error interno al obtener usuario por ID.",
+    };
+  }
+}
+
+async function getAllUsersRepo() {
+  try {
+    const users = await userModel.find({}, { nombre: 1, correo: 1, rol: 1 });
+    return users;
+  } catch (error) {
+    console.error("Error al obtener todos los usuarios:", error);
+    throw error;
+  }
+}
+
+async function getInactiveUsers(daysInactive) {
+  const inactiveDate = new Date();
+  inactiveDate.setDate(inactiveDate.getDate() - daysInactive);
+
+  try {
+    const inactiveUsers = await userModel.find({
+      last_connection: { $lt: inactiveDate },
+    });
+
+    return inactiveUsers;
+  } catch (error) {
+    console.error("Error al obtener usuarios inactivos:", error);
+    throw error;
+  }
+}
+
+async function deleteUsers(userIds) {
+  try {
+    const deleteResult = await userModel.deleteMany({ _id: { $in: userIds } });
+
+    console.log(
+      `${deleteResult.deletedCount} usuarios eliminados correctamente.`
+    );
+
+    return deleteResult.deletedCount;
+  } catch (error) {
+    console.error("Error al eliminar usuarios:", error);
+    throw error;
+  }
+}
+
+async function deleteUserById(userId) {
+  try {
+    const result = await userModel.findByIdAndDelete(userId);
+
+    if (result) {
+      return { success: true };
+    } else {
+      return {
+        success: false,
+        message: "No se pudo encontrar o eliminar el usuario.",
+      };
+    }
+  } catch (error) {
+    console.error("Error al eliminar usuario por ID:", error);
+    return {
+      success: false,
+      message: "Error interno al eliminar usuario por ID.",
+    };
   }
 }
 
@@ -151,4 +234,8 @@ export {
   isTokenExpired,
   toggleUserRoleRepo,
   getUserById,
+  getAllUsersRepo,
+  getInactiveUsers,
+  deleteUsers,
+  deleteUserById,
 };

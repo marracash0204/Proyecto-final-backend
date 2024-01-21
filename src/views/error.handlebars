@@ -22,6 +22,6 @@
 </form>
 {{else if tokenExpired}}
 <h2>El token a expirado por favor vuelve a intentar restablecer tu contraseña <a href="/recover-request">Aqui</a></h2>
-{{else}}
+{{else if noStockProducts}}
 <h2>Producto sin stock, por favor regresa para agregar otros productos</h2>
 {{/if}}

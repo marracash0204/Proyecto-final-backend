@@ -7,6 +7,7 @@ import emailService from "../service/emailService.js";
 import { createError } from "../service/utilities/errorHandler.js";
 import logger from "../service/utilities/logger.js";
 import { userModel } from "../models/userModel.js";
+import config from "../config/config.js";
 
 const cartsManager = new cartManager();
 const productManager = new productsManager();
@@ -75,7 +76,7 @@ router.post("/add-to-cart/:productId", async (req, res) => {
     if (cartAdd !== null) {
       return res.redirect("/products");
     } else {
-      res.render("error", { error: "El producto no tiene stock disponible." });
+      res.render("error", { noStockProducts: true });
     }
   } catch (error) {
     logger.error("Error al agregar producto al carrito:", error);
@@ -106,6 +107,7 @@ router.post("/cart/:cid/purchase", async (req, res) => {
         ticketResult.purchaser,
         cart.products
       );
+      console.log(cart.products);
 
       res.render("ticket", { result: ticketResult, purchaser: purchaser });
     } else {
@@ -118,6 +120,7 @@ router.post("/cart/:cid/purchase", async (req, res) => {
     res.status(500).render("error", { error: "Error al finalizar la compra" });
   }
 });
+
 router.post("/delete-product/:productId", async (req, res) => {
   try {
     const productId = req.params.productId;
@@ -198,6 +201,16 @@ router.post(
 
         if (result.success) {
           res.redirect("/modifyProduct");
+
+          if (product.owner.rol === "premium") {
+            const mailOptions = {
+              from: config.emailUser,
+              to: product.owner.email,
+              subject: "Producto Eliminado",
+              text: `Hola ${product.owner.first_name},\n\nTu producto ${product.title} ha sido eliminado. Si necesitas más información, por favor, contáctanos.`,
+            };
+            await emailService.sendEmail(mailOptions);
+          }
         } else {
           res.status(404).send("No se pudo eliminar el producto");
         }

@@ -37,3 +37,15 @@ export const isUserOrPremium = (req, res, next) => {
       );
   }
 };
+
+export const isAdmin = (req, res, next) => {
+  if (req.isAuthenticated() && req.user.rol === "admin") {
+    return next();
+  } else {
+    res
+      .status(403)
+      .send(
+        "Acceso prohibido. Solo los Administradores pueden realizar esta acción."
+      );
+  }
+};

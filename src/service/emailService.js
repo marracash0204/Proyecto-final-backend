@@ -1,5 +1,8 @@
 import nodemailer from "nodemailer";
 import config from "../config/config.js";
+import { productsManager } from "./productsManager.js";
+
+const productManager = new productsManager();
 
 class EmailService {
   constructor() {
@@ -35,14 +38,28 @@ class EmailService {
     const html = `
       <p>Gracias por tu compra. El total de la compra es $${totalAmount}.</p>
       <ul>
-        ${products
-          .map((product) => `<li>${product.name} - ${product.price}</li>`)
-          .join("")}
-      </ul>
+      ${
+        products && products.length > 0
+          ? products
+              .map(
+                (item) =>
+                  `<li>${item.product.title} - ${item.product.price}</li>`
+              )
+              .join("")
+          : ""
+      }
+    </ul>
     `;
 
+    const mailOptions = {
+      from: config.emailUser,
+      to: email,
+      subject: subject,
+      html: html,
+    };
+
     try {
-      const result = await this.sendEmail(email, subject, undefined, html);
+      const result = await this.sendEmail(mailOptions);
       console.log(
         "Correo electrónico de confirmación de compra enviado:",
         result

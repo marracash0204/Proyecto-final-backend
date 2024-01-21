@@ -8,11 +8,14 @@ import {
   resetPasswordService,
   getUserByTokenService,
   isTokenExpiredService,
-} from "../service/authService.js";
+  deleteInactiveUsersService,
+  getAllUsersService,
+  deleteUserByIdService,
+} from "../service/userService.js";
 import bcrypt from "bcrypt";
-import { getUserById } from "../repository/authRepository.js";
-import { changeUserRole } from "../service/authService.js";
-import { isUserOrPremium } from "../middlewares/autMiddleware.js";
+import { getUserById } from "../repository/userRepository.js";
+import { changeUserRole } from "../service/userService.js";
+import { isAdmin, isUserOrPremium } from "../middlewares/autMiddleware.js";
 import logger from "../service/utilities/logger.js";
 import multer from "multer";
 
@@ -60,6 +63,16 @@ const upload = multer({
 
 const cartsManager = new cartManager();
 const router = Router();
+
+router.get("/users", async (req, res) => {
+  try {
+    const users = await getAllUsersService();
+    res.status(200).json(users);
+  } catch (error) {
+    console.error("Error al obtener todos los usuarios:", error);
+    res.status(500).json({ error: "Error interno al obtener usuarios." });
+  }
+});
 
 router.get("/users/premium/:uId", isUserOrPremium, async (req, res) => {
   try {
@@ -302,6 +315,42 @@ router.post("/users/premium/:uid", isUserOrPremium, async (req, res) => {
   }
 });
 
+router.post("/admin/users/:uid", isAdmin, async (req, res) => {
+  try {
+    const userId = req.params.uid;
+    const newRole = req.body.newRole;
+
+    const user = await getUserById(userId);
+
+    if (!user) {
+      return res.status(404).json({ message: "Usuario no encontrado." });
+    }
+
+    if (user.rol === newRole) {
+      return res
+        .status(400)
+        .json({ message: "El usuario ya tiene asignado el rol seleccionado." });
+    }
+
+    const success = await changeUserRole(userId, newRole);
+
+    if (success) {
+      return res
+        .status(200)
+        .json({ message: "Rol de usuario actualizado con éxito." });
+    } else {
+      return res
+        .status(404)
+        .json({ message: "No se pudo actualizar el rol del usuario." });
+    }
+  } catch (error) {
+    console.error("Error al cambiar el rol de usuario:", error);
+    res
+      .status(500)
+      .json({ message: "Error interno al cambiar el rol de usuario." });
+  }
+});
+
 router.get("/recover-reset/:token", async (req, res) => {
   const { token } = req.params;
 
@@ -371,6 +420,39 @@ router.post("/recover-reset/:token", async (req, res) => {
     res.status(500).render("auth/recoverReset", {
       error: "Error en el proceso de restablecimiento de contraseña.",
     });
+  }
+});
+
+router.delete("/users/", isAdmin, async (req, res) => {
+  try {
+    await deleteInactiveUsersService();
+    res.status(204).send("los usuarios inactivos fueron eliminados con éxito.");
+  } catch (error) {
+    console.error("Error al eliminar usuarios inactivos:", error);
+    res
+      .status(500)
+      .json({ error: "Error interno al eliminar usuarios inactivos." });
+  }
+});
+
+router.post("/admin/users/:userId/delete", async (req, res) => {
+  const userId = req.params.userId;
+
+  try {
+    const deletionResult = await deleteUserByIdService(userId);
+
+    if (deletionResult.success) {
+      return res.status(200).json({ message: "Usuario eliminado con éxito." });
+    } else {
+      return res
+        .status(404)
+        .json({ message: "No se pudo encontrar o eliminar el usuario." });
+    }
+  } catch (error) {
+    console.error("Error al eliminar usuario:", error);
+    return res
+      .status(500)
+      .json({ error: "Error interno al eliminar usuario." });
   }
 });
 
