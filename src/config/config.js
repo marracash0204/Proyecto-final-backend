@@ -12,6 +12,7 @@ const config = {
   emailPass: process.env.EMAIL_PASS,
   emailAdmin: process.env.EMAIL_ADMIN,
   passwordAdmin: process.env.PASSWORD_ADMIN,
+  port: process.env.PORT,
 };
 
 export default config;

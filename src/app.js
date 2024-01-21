@@ -27,7 +27,7 @@ const productManager = new productsManager();
 const messagesManager = new messageManager();
 
 const app = express();
-const httpServer = app.listen(3001, () => console.log("puerto 3001"));
+const httpServer = app.listen(config.port, () => console.log("puerto 3001"));
 const socketServer = new Server(httpServer);
 
 app.use(express.urlencoded({ extended: true }));
