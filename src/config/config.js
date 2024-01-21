@@ -4,7 +4,7 @@ dotenv.config();
 
 const config = {
   nodeEnv: process.env.NODE_ENV,
-  mongoURI: process.env.MONGO_URI,
+  mongoURI: process.env.MONGODB_URL,
   sessionSecret: process.env.SESSION_SECRET,
   passportGitHubClientId: process.env.PASSPORT_GITHUB_CLIENT_ID,
   passportGitHubClientSecret: process.env.PASSPORT_GITHUB_CLIENT_SECRET,
