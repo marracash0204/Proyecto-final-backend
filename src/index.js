@@ -3,23 +3,28 @@ import session from "express-session";
 import MongoStore from "connect-mongo";
 import handlebars from "express-handlebars";
 import handlebarsHelpers from "handlebars-helpers";
-import initializePassport from "./src/service/utilities/passport.js";
-import productsRouter from "./src/routes/productsRoutes.js";
-import cartRouter from "./src/routes/cartsRoutes.js";
-import viewsrouter from "./src/routes/viewsRoutes.js";
-import viewsPostRoutes from "./src/routes/viewsPostRoutes.js";
+import initializePassport from "./service/utilities/passport.js";
+import productsRouter from "./routes/productsRoutes.js";
+import cartRouter from "./routes/cartsRoutes.js";
+import viewsrouter from "./routes/viewsRoutes.js";
+import viewsPostRoutes from "./routes/viewsPostRoutes.js";
 import { Server } from "socket.io";
 import passport from "passport";
-import { messageManager } from "./src/service/messageManager.js";
+import { messageManager } from "./service/messageManager.js";
 import mongoose from "mongoose";
-import { productsManager } from "./src/service/productsManager.js";
-import userRouter from "./src/routes/userRoutes.js";
-import config from "./src/config/config.js";
+import { productsManager } from "./service/productsManager.js";
+import userRouter from "./routes/userRoutes.js";
+import config from "./config/config.js";
 import moment from "moment/moment.js";
-import routerError from "./src/routes/errorRoutes.js";
+import routerError from "./routes/errorRoutes.js";
 import swaggerJSDoc from "swagger-jsdoc";
 import swaggerUiExpress from "swagger-ui-express";
-import __dirname from "./src/service/utilities/index.js";
+import __direcname from "./service/utilities/index.js";
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 mongoose.connect(config.mongoURI);
 
@@ -55,7 +60,7 @@ const swaggerOptions = {
     },
   },
 
-  apis: [`${__dirname}/docs/**/*.yaml`],
+  apis: [`${__direcname}/docs/**/*.yaml`],
 };
 
 const specs = swaggerJSDoc(swaggerOptions);
@@ -81,9 +86,9 @@ const hbs = handlebars.create({
 });
 
 app.engine("handlebars", hbs.engine);
-app.set("views", "./src/views");
+app.set("views", __dirname + "/views");
 app.set("view engine", "handlebars");
-app.use(express.static("./src/public"));
+app.use(express.static(__dirname + "/public"));
 
 app.use("/api", userRouter);
 app.use("/api/products", productsRouter);
