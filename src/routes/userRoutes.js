@@ -160,8 +160,8 @@ router.post(
       }
 
       await user.save();
-
-      res.status(200).redirect("/profile");
+      const redirectURL = `http://${req.get('host')}/profile`;
+      res.status(200).redirect(redirectURL);
     } catch (error) {
       logger.error("Error al subir documentos:", error);
 
@@ -181,8 +181,9 @@ router.post(
     newUser.cart = newCart._id;
     await newUser.save();
     req.session.cartId = newCart._id;
-
-    res.redirect("/login");
+    
+    const redirectURL = `http://${req.get('host')}/login`;
+    res.redirect(redirectURL);
   }
 );
 
@@ -206,7 +207,8 @@ router.post(
 
     req.session.cartId = req.user.cart;
     req.session.isLogged = true;
-    return res.redirect("/profile");
+    const redirectURL = `http://${req.get('host')}/profile`;
+    return res.redirect(redirectURL);
   }
 );
 
@@ -221,7 +223,7 @@ router.post("/auth/recover-request", async (req, res) => {
   const token = await generateAndStoreTokenService(email);
 
   if (token) {
-    const resetLink = `http://localhost:3001/recover-reset/${token}`;
+    const resetLink = `http://${req.get('host')}/recover-reset/${token}`;
     const mailOptions = {
       from: "shea.mitchell70@ethereal.email",
       to: user.email,

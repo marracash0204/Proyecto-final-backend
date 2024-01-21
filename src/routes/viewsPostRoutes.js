@@ -31,7 +31,8 @@ router.post("/addproduct", isAdminOrPremium, async (req, res) => {
     );
 
     const productId = product.id;
-    res.redirect(`/addproduct`);
+    const redirectURL = `http://${req.get('host')}/addproduct`;
+    res.redirect(redirectURL);
   } catch (error) {
     logger.error("Error al agregar o modificar un producto:", error);
     res.status(500).json({
@@ -74,7 +75,8 @@ router.post("/add-to-cart/:productId", async (req, res) => {
     );
 
     if (cartAdd !== null) {
-      return res.redirect("/products");
+      const redirectURL = `http://${req.get('host')}/products`;
+      return res.redirect(redirectURL);
     } else {
       res.render("error", { noStockProducts: true });
     }
@@ -139,8 +141,9 @@ router.post("/delete-product/:productId", async (req, res) => {
       if (result && result.noProducts) {
         return res.render("error", { noProductsToDelete: true });
       }
-
-      return res.redirect("/products");
+      
+      const redirectURL = `http://${req.get('host')}/products`;
+      return res.redirect(redirectURL);
     } catch (error) {
       logger.error("Error al eliminar producto del carrito:", error);
 
@@ -173,7 +176,8 @@ router.post("/modify-product/:prodId", isAdminOrPremium, async (req, res) => {
     );
 
     if (result.success) {
-      res.redirect(`/modifyProduct`);
+      const redirectURL = `http://${req.get('host')}/modifyProduct`;
+      res.redirect(redirectURL);
     } else {
       res.status(404).send(result.message);
     }
@@ -200,7 +204,8 @@ router.post(
         const result = await productManager.deleteProduct(productId);
 
         if (result.success) {
-          res.redirect("/modifyProduct");
+          const redirectURL = `http://${req.get('host')}/modifyProduct`;
+          res.redirect(redirectURL);
 
           if (product.owner.rol === "premium") {
             const mailOptions = {
@@ -256,8 +261,8 @@ router.post("/logout", async (req, res) => {
           logger.error("Error al destruir la sesión:", err);
           return res.status(500).send("Error al cerrar sesión");
         }
-
-        res.redirect("/login");
+        const redirectURL = `http://${req.get('host')}/login`;
+        res.redirect(redirectURL);
       });
     });
   } catch (error) {

@@ -115,7 +115,8 @@ router.get("/profile", async (req, res) => {
       return res.render("user/profile", { user: userProfile, cartId });
     }
 
-    return res.redirect("/login");
+    const redirectURL = `http://${req.get("host")}/login`;
+    return res.redirect(redirectURL);
   } catch (error) {
     logger.error("Error al renderizar el perfil:", error);
     res.status(500).send("Error al renderizar el perfil");
@@ -144,7 +145,8 @@ router.get("/recover-reset/:token", async (req, res) => {
 
 router.get("/signup", async (req, res) => {
   if (req.isAuthenticated()) {
-    res.redirect("/login");
+    const redirectURL = `http://${req.get("host")}/login`;
+    res.redirect(redirectURL);
   }
 
   res.render("auth/signup");
@@ -152,14 +154,16 @@ router.get("/signup", async (req, res) => {
 
 router.get("/login", async (req, res) => {
   if (req.isAuthenticated()) {
-    res.redirect("/products");
+    const redirectURL = `http://${req.get("host")}/products`;
+    res.redirect(redirectURL);
   }
   res.render("auth/login");
 });
 
 router.get("/recover", async (req, res) => {
   if (req.isAuthenticated()) {
-    res.redirect("/products");
+    const redirectURL = `http://${req.get("host")}/products`;
+    res.redirect(redirectURL);
   }
   res.render("auth/recover");
 });
@@ -184,7 +188,8 @@ router.get(
       req.session.cartId = req.user.cart;
     }
     req.session.isLogged = true;
-    res.redirect("/profile");
+    const redirectURL = `http://${req.get("host")}/profile`;
+    res.redirect(redirectURL);
   }
 );
 
