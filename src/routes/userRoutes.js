@@ -79,6 +79,7 @@ router.get("/users/premium/:uId", isUserOrPremium, async (req, res) => {
   try {
     const userId = req.params.uId;
     const user = await getUserById(userId);
+    console.log('user', user);
 
     return res.render("auth/rol", { user });
   } catch (error) {

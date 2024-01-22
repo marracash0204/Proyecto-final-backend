@@ -1,32 +1,32 @@
 <h1>Cambiar Rol</h1>
 <strong>Nombre: </strong>
-<h2>{{user.first_name}} {{user.last_name}}</h2>
+<h2>{{user.user.first_name}} {{user.user.last_name}}</h2>
 <strong>Email: </strong>
-<h2>{{user.email}}</h2>
+<h2>{{user.user.email}}</h2>
 <strong>Rol Actual: </strong>
-<h2>{{user.rol}}</h2><br>
+<h2>{{user.user.rol}}</h2><br>
 <br>
 <h2>Debes subir tu documento de identidad para poder cambiar de rol</h2>
-<form action="/api/users/{{user._id}}/documents" method="POST" enctype="multipart/form-data">
+<form action="/api/users/{{user.user._id}}/documents" method="POST" enctype="multipart/form-data">
     <label for="file">Seleccionar documento de identificacion:</label>
     <input type="file" name="identification" accept=".pdf, .doc, .docx">
     <button type="submit">Subir documento</button>
 </form>
 <h2>Subir Comprobante de Cuenta</h2>
-<form action="/api/users/{{user._id}}/documents" method="POST" enctype="multipart/form-data">
+<form action="/api/users/{{user.user._id}}/documents" method="POST" enctype="multipart/form-data">
     <label for="file">Seleccionar comprobante de cuenta:</label>
     <input type="file" name="comprobanteCuenta" accept=".pdf, .doc, .docx">
     <button type="submit">Subir comprobante</button>
 </form>
 <h2>Subir Comprobante de Domicilio</h2>
-<form action="/api/users/{{user._id}}/documents" method="POST" enctype="multipart/form-data">
+<form action="/api/users/{{user.user._id}}/documents" method="POST" enctype="multipart/form-data">
     <label for="file">Seleccionar comprobante de domicilio:</label>
     <input type="file" name="comprobanteDomicilio" accept=".pdf, .doc, .docx">
     <button type="submit">Subir comprobante</button>
 </form>
 
 <hr>
-<form action="/api/users/premium/{{user._id}}" method="post">
+<form action="/api/users/premium/{{user.user._id}}" method="post">
     <label for="newRole">Selecciona un nuevo rol:</label>
     <select name="newRole" id="newRole">
         <option value="usuario" {{#if (eq user.rol "usuario" )}}selected{{/if}}>Usuario</option>

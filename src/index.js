@@ -95,6 +95,11 @@ app.use("/api/products", productsRouter);
 app.use("/api/carts", cartRouter);
 app.use("/", viewsrouter, viewsPostRoutes, routerError);
 
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).render("error", { error: err });
+});
+
 socketServer.on("connection", async (socket) => {
   console.log("connection");
 
