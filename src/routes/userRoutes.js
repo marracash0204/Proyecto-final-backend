@@ -19,6 +19,7 @@ import { isAdmin, isUserOrPremium } from "../middlewares/autMiddleware.js";
 import logger from "../service/utilities/logger.js";
 import multer from "multer";
 
+
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     const fieldName = file.fieldname;
@@ -44,7 +45,7 @@ const storage = multer.diskStorage({
         destination = "src/public/files/comprobanteDomicilio";
         break;
       default:
-        destination = "src/public/files/default";
+        destination = "src/public/files/documents";
     }
 
     cb(null, destination);
@@ -98,12 +99,14 @@ router.post(
   async (req, res) => {
     try {
       const userId = req.params.uid;
-      const user = await getUserById(userId);
+      const result = await getUserById(userId);
 
-      if (!user) {
-        return res.status(404).json({ error: "Usuario no encontrado" });
+      if (!result.success) {
+        const errorMessage = result.message || "Usuario no encontrado";
+        return res.status(404).json({ error: errorMessage });
       }
 
+      const user = result.user;
       const uploadedFiles = req.files;
 
       user.documents = user.documents || [];
@@ -159,18 +162,15 @@ router.post(
         );
       }
 
-      await user.save();
       const redirectURL = `http://${req.get('host')}/profile`;
       res.status(200).redirect(redirectURL);
     } catch (error) {
       logger.error("Error al subir documentos:", error);
-
-      res
-        .status(500)
-        .json({ error: `Error al subir documentos: ${error.message}` });
+      res.status(500).json({ error: `Error al subir documentos: ${error.message}` });
     }
   }
 );
+
 
 router.post(
   "/signup",
