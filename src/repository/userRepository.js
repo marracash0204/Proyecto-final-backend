@@ -166,7 +166,7 @@ async function getUserById(userId) {
 
 async function getAllUsersRepo() {
   try {
-    const users = await userModel.find({}, { nombre: 1, correo: 1, rol: 1 });
+    const users = await userModel.find({}, { first_name: 1, email: 1, rol: 1 });
     return users;
   } catch (error) {
     console.error("Error al obtener todos los usuarios:", error);
