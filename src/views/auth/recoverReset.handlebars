@@ -1,17 +1,21 @@
-<h1>Restablecer Contraseña</h1>
-  
-  {{#if success}}
-    <p>{{success}}</p>
-  {{/if}}
-  
-  {{#if error}}
-    <p style="color: red;">{{error}}</p>
-  {{/if}}
+<div class="d-flex align-items-center justify-content-center vh-100">
+  <div class="row">
+    <h1>Restablecer Contraseña</h1>
 
-  <form action="/api/recover-reset/{{token}}" method="post">
-    <label for="newPassword">Nueva contraseña:</label>
-    <input type="password" name="newPassword" placeholder="Nueva contraseña" required>
-    <label for="confirmPassword">Confirmar contraseña:</label>
-    <input type="password" name="confirmPassword" placeholder="Confirmar contraseña" required>
-    <button type="submit">Restablecer contraseña</button>
-  </form>
+    {{#if success}}
+    <p>{{success}}</p>
+    {{/if}}
+
+    {{#if error}}
+    <p style="color: red;">{{error}}</p>
+    {{/if}}
+
+    <form action="/api/recover-reset/{{token}}" method="post">
+      <label for="newPassword" class="form-label">Nueva Contraseña:</label>
+      <input type="password" name="newPassword" class="form-control mb-3" placeholder="Nueva Contraseña" required>
+      <label for="confirmPassword" class="form-label">Confirmar Contraseña:</label>
+      <input type="password" name="confirmPassword" class="form-control mb-3" placeholder="Confirmar Contraseña" required>
+      <button type="submit" class="btn btn-info">Restablecer Contraseña</button>
+    </form>
+  </div>
+</div>

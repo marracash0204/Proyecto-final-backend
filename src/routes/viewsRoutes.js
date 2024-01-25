@@ -129,17 +129,12 @@ router.get("/recover-request", (req, res) => {
 
 router.get("/recover-reset/:token", async (req, res) => {
   const { token } = req.params;
-  console.log("usuario con token:", token);
-  const user = await userModel.findOne({ resetToken: token });
-  console.log("usuario encontrado con los datos:", user);
-  if (
-    !user ||
-    !user.resetTokenExpiration ||
-    user.resetTokenExpiration <= Date.now()
-  ) {
+  const user = await userModel.findOne({ resetToken: { $regex: new RegExp(token, "i") } });
+
+  if (!user || !user.resetTokenExpiration || new Date(user.resetTokenExpiration) <= Date.now()) {
     return res.render("error", { tokenExpired: true });
   }
-
+  console.log("token valido", token);
   res.render("auth/recoverReset", { token });
 });
 

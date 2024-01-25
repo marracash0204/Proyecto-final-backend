@@ -1,40 +1,43 @@
-<h1>Cambiar Rol</h1>
-<strong>Nombre: </strong>
-<h2>{{user.user.first_name}} {{user.user.last_name}}</h2>
-<strong>Email: </strong>
-<h2>{{user.user.email}}</h2>
-<strong>Rol Actual: </strong>
-<h2>{{user.user.rol}}</h2><br>
-<br>
-<h2>Debes subir tu documento de identidad para poder cambiar de rol</h2>
+<h1 class="text-center mb-0 bg-secondary">Cambio de Roles</h1>
+<div class="d-flex">
+<div class="col-3 container-fluid bg-secondary pt-3">
+<ul class="nav flex-column"> 
+<li class="nav-item text-white"><strong>Nombre: </strong>
+<span class="text-black">{{user.user.first_name}} {{user.user.last_name}}</span></li>
+<li class="nav-item text-white"><strong>Email: </strong>
+<span class="text-black">{{user.user.email}}</span></li>
+<li class="nav-item mb-3 text-white"><strong>Rol Actual: </strong>:
+<span class="text-black">{{user.user.rol}}</span></li>
+<a href="/profile" class="btn btn-success">Regresar al Profile</a>
+</ul>
+</div>
+<div class="col-9 container">
+<h4 class="text-center mt-3">Debes Subir tu Documento de Identidad para poder Cambiar de Rol</h4>
 <form action="/api/users/{{user.user._id}}/documents" method="POST" enctype="multipart/form-data">
-    <label for="file">Seleccionar documento de identificacion:</label>
-    <input type="file" name="identification" accept=".pdf, .doc, .docx">
-    <button type="submit">Subir documento</button>
+    <label for="file" class="form-label">Seleccionar Documento de Identificacion:</label>
+    <input type="file" name="identification" class="form-control mb-3" accept=".pdf, .doc, .docx">
+    <button type="submit" class="btn btn-info mb-3">Subir Documento</button>
 </form>
-<h2>Subir Comprobante de Cuenta</h2>
 <form action="/api/users/{{user.user._id}}/documents" method="POST" enctype="multipart/form-data">
-    <label for="file">Seleccionar comprobante de cuenta:</label>
-    <input type="file" name="comprobanteCuenta" accept=".pdf, .doc, .docx">
-    <button type="submit">Subir comprobante</button>
+    <label for="file" class="form-label">Seleccionar Comprobante de Cuenta:</label>
+    <input type="file" name="comprobanteCuenta" class="form-control mb-3" accept=".pdf, .doc, .docx">
+    <button type="submit" class="btn btn-info mb-3">Subir Comprobante</button>
 </form>
-<h2>Subir Comprobante de Domicilio</h2>
 <form action="/api/users/{{user.user._id}}/documents" method="POST" enctype="multipart/form-data">
-    <label for="file">Seleccionar comprobante de domicilio:</label>
-    <input type="file" name="comprobanteDomicilio" accept=".pdf, .doc, .docx">
-    <button type="submit">Subir comprobante</button>
+    <label for="file" class="form-label">Seleccionar Comprobante de Domicilio:</label>
+    <input type="file" name="comprobanteDomicilio" class="form-control mb-3" accept=".pdf, .doc, .docx">
+    <button type="submit" class="btn btn-info mb-3">Subir Comprobante</button>
 </form>
 
 <hr>
 <form action="/api/users/premium/{{user.user._id}}" method="post">
-    <label for="newRole">Selecciona un nuevo rol:</label>
-    <select name="newRole" id="newRole">
+    <label for="newRole" class="form-label">Selecciona un Nuevo Rol:</label>
+    <select name="newRole" id="newRole" class="form-select mb-3">
         <option value="usuario" {{#if (eq user.rol "usuario" )}}selected{{/if}}>Usuario</option>
         <option value="premium" {{#if (eq user.rol "premium" )}}selected{{/if}}>Premium</option>
     </select>
-    <button type="submit">Cambiar Rol</button>
+    <button type="submit" class="btn btn-success">Cambiar Rol</button>
 </form>
 
-<form action="/profile" method="get">
-    <button type="submit">Regresar al profile</button>
-</form>
+</div>
+</div>

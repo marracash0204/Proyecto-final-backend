@@ -1,16 +1,22 @@
-
-<form action="/api/login" method="post">
-    <input type="email" name="email" placeholder="email">
-    <input type="text" name="password" placeholder="clave">
-    <button value="submit">Ingresar</button>
-</form>
-
-<form action="/signup" method="get">
-    <button value="submit">Registrarse</button>
-</form>
-
-<form action="/recover-request" method="get">
-    <button value="submit">Recuperar contraseña</button>
-</form>
-
-<a href="/auth/github">Iniciar sesión con GitHub</a>
+<div class="d-flex align-items-center justify-content-center vh-100">
+    <div class="row">
+        <h2 class="text-center">Inicio de Sesión</h2>
+        <form class="mb-3" action="/api/login" method="post">
+            <div class="mb-3">
+                <label for="email" class="form-label">Correo Electrónico</label>
+                <input type="email" class="form-control" name="email" placeholder="Email">
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Contraseña</label>
+                <input type="password" class="form-control" name="password" placeholder="Contraseña">
+            </div>
+            <div class="d-flex mb-3">
+                <button type="submit" class="btn btn-primary me-2">Iniciar Sesión</button>
+                <a href="/auth/github" class="btn btn-success me-2">Iniciar Sesión con GitHub</a>
+                <a href="/signup" class="btn btn-primary">Registrarse</a>
+            </div>
+            <div id="emailHelp" class="form-text mb-2">¿Has Perdido u Olvidado la Contraseña?</div>
+            <a href="/recover-request" class="btn btn-info">Recuperar Contraseña</a>
+        </form>
+    </div>
+</div>
