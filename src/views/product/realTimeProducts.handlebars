@@ -1,8 +1,8 @@
-<div>
-    <h1>Productos en tiempo real</h1>
-    <ul id="product-list">
+<div class="container-fluid">
+    <h1 class="text-center">Productos en Tiempo Real</h1>
+    <ul id="product-list" class="list-group">
         {{#each products}}
-        <li>
+        <li class="list-group-item">
             ID: {{this.id}} <br>
             Title: {{this.title}} <br>
             Description: {{this.description}} <br>
@@ -12,18 +12,10 @@
         </li>
         {{/each}}
     </ul>
-</div>
 <div>
-    <h2>¿Desea eliminar o editar un producto?</h2>
-    </form>
-    <form action="/modifyProduct" method="GET">
-        <button type="submit">Editar y/o eliminar productos</button>
-    </form>
-
-    <h2>¿Desea agregar un producto?</h2>
-    <form action="/addproduct" method="GET">
-        <button type="submit">Agregar productos</button>
-    </form>
+    <a href="/modifyProduct" class="btn btn-info mt-2 mb-2">Modificar o Eliminar Productos</a>
+    <a href="/addproduct" class="btn btn-success mt-2 mb-2">Agregar productos</a>
+</div>
 </div>
 
 <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>

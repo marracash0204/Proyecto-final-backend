@@ -1,62 +1,62 @@
-<form action="/logout" method="post">
-  <button type="submit">Cerrar sesión</button>
-</form>
+<body class="container-fluid">
+  <form class="text-end" action="/logout" method="post">
+    <a href="/profile" class="btn btn-primary mt-2 mb-2">Ver los productos en el carrito</a>
+    {{#if (eq user.rol "admin")}}
+    <a href="/addproduct" class="btn btn-success mt-2 mb-2">Agregar productos</a>
+    <a href="/modifyProduct" class="btn btn-info mt-2 mb-2">Modificar o Eliminar Productos</a>
+    {{/if}}
+    {{#if (eq user.rol "premium")}}
+    <a href="/addproduct" class="btn btn-success mt-2 mb-2">Agregar productos</a>
+    <a href="/modifyProduct" class="btn btn-info mt-2 mb-2">Modificar o Eliminar Productos</a>
+    {{/if}}
+    <button type="submit" class="btn btn-danger mt-2 mb-2">Cerrar sesión</button>
+  </form>
 
-<form action="/profile" method="get">
-  <button type="submit">Ver los productos en el carrito</button>
-</form>
+  {{#if (eq user.rol "admin")}}
+  <h1 class="text-center">¡Bienvenido administrador! Estos son los productos disponibles</h1>
 
+  {{else if (eq user.rol "premium")}}
+  <h1>¡Hola {{{user.first_name}}} {{{user.last_name}}}! Estos son los productos disponibles</h1>
 
-{{#if (eq user.rol "admin")}}
-<h1>¡Bienvenido administrador! Estos son los productos disponibles</h1>
-<form action="/addproduct" method="GET">
-  <button type="submit">Agregar productos</button>
-</form>
-<form action="/modifyProduct" method="GET">
-  <button type="submit">Modificar o Eliminar Productos</button>
-</form>
-
-{{else if (eq user.rol "premium")}}
-<h1>¡Hola {{{user.first_name}}} {{{user.last_name}}}! Estos son los productos disponibles</h1>
-<form action="/addproduct" method="GET">
-  <button type="submit">Agregar productos</button>
-</form>
-<form action="/modifyProduct" method="GET">
-  <button type="submit">Modificar Productos</button>
-</form>
-{{else}}
-<h1>¡Hola {{{user.first_name}}} {{{user.last_name}}}
-  ! Estos son los productos disponibles</h1>
-{{/if}}
-<ul>
-  {{#each products}}
-  <li>
-    ID: {{this.id}} <br>
-    Title: {{this.title}} <br>
-    Description: {{this.description}} <br>
-    Price: {{this.price}} <br>
-    Code: {{this.code}} <br>
-    Stock: {{this.stock}}<br>
-    Owner: {{this.owner}}
-    <form action="/add-to-cart/{{this.id}}" method="POST">
-      <button type="submit">Agregar al Carrito</button>
-    </form>
-    <form action="/delete-product/{{this.id}}" method="POST">
-      <button type="submit">Eliminar producto del carrito</button>
-    </form>
-
-  </li>
-  {{/each}}
-</ul>
-
-{{#if totalPages}}
-<div class="pagination">
-  {{#if (gt currentPage 1)}}
-  <a href="/products?page={{subtract currentPage 1}}" class="page-link">Anterior</a>
+  {{else}}
+  <h1>¡Hola {{{user.first_name}}} {{{user.last_name}}}
+    ! Estos son los productos disponibles</h1>
   {{/if}}
+  <ul class="list-group">
+    {{#each products}}
+    <li class="list-group-item">
+      <div class="row">
+        <div class="col-md-6">
+          ID: {{this.id}} <br>
+          Title: {{this.title}} <br>
+          Description: {{this.description}} <br>
+          Price: {{this.price}} <br>
+          Code: {{this.code}} <br>
+          Stock: {{this.stock}}<br>
+          Owner: {{this.owner}}
+        </div>
+        <div class="col-md-6">
+          <form action="/add-to-cart/{{this.id}}" method="POST" class="d-flex">
+            <button type="submit" class="btn btn-info mb-3 mt-3 me-2">Agregar al Carrito</button>
+          </form>
+          <form action="/delete-product/{{this.id}}" method="POST" class="d-flex">
+            <button type="submit" class="btn btn-danger">Eliminar producto del carrito</button>
+          </form>
+        </div>
+      </div>
+    </li>
+    {{/each}}
+  </ul>
 
-  {{#if (lt currentPage totalPages)}}
-  <a href="/products?page={{add currentPage 1}}" class="page-link">Siguiente</a>
+  {{#if totalPages}}
+  <div class="pagination">
+    {{#if (gt currentPage 1)}}
+    <a href="/products?page={{subtract currentPage 1}}" class="page-link">Anterior</a>
+    {{/if}}
+
+    {{#if (lt currentPage totalPages)}}
+    <a href="/products?page={{add currentPage 1}}" class="page-link">Siguiente</a>
+    {{/if}}
+  </div>
   {{/if}}
-</div>
-{{/if}}
+</body>

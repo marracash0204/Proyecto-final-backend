@@ -1,7 +1,10 @@
+<body>
+<div class="d-flex justify-content-center align-items-center">
+  <div class="row">
 <h1>Contenido del Carrito</h1>
-<ul>
+<ul class="nav flex-column">
   {{#each cart.products}}
-  <li>
+  <li class="nav-item">
     ID del producto: {{this.product._id}} <br>
     Title: {{this.product.title}} <br>
     Description: {{this.product.description}} <br>
@@ -12,3 +15,6 @@
   </li>
   {{/each}}
 </ul>
+</div>
+</div>
+</body>

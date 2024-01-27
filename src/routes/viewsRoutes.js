@@ -38,6 +38,7 @@ router.get("/cart/:cartId", async (req, res) => {
   const cartId = req.params.cartId;
 
   const cart = await cartsManager.getCartById(cartId);
+  console.log(cart.products);
 
   res.render("cart/cart", { cart });
 });
@@ -129,9 +130,15 @@ router.get("/recover-request", (req, res) => {
 
 router.get("/recover-reset/:token", async (req, res) => {
   const { token } = req.params;
-  const user = await userModel.findOne({ resetToken: { $regex: new RegExp(token, "i") } });
+  const user = await userModel.findOne({
+    resetToken: { $regex: new RegExp(token, "i") },
+  });
 
-  if (!user || !user.resetTokenExpiration || new Date(user.resetTokenExpiration) <= Date.now()) {
+  if (
+    !user ||
+    !user.resetTokenExpiration ||
+    new Date(user.resetTokenExpiration) <= Date.now()
+  ) {
     return res.render("error", { tokenExpired: true });
   }
   console.log("token valido", token);

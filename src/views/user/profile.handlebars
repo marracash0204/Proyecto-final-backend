@@ -1,62 +1,84 @@
-<h2>
-  Hola {{user.first_name}} {{user.last_name}}
-</h2>
+<body class="container-fluid mt-3">
 
-<p>
-  <strong>Email:</strong> {{user.email}} <br />
-  <strong>Edad:</strong> {{user.age}}<br />
-  <strong>Rol:</strong> {{user.rol}}
-</p>
+  <div class="row">
+    <div class="col-6">
+      <h2>
+        Hola {{user.firstName}} {{user.lastName}}
+      </h2>
 
-<form action="/api/users/{{userId}}/documents" method="POST" enctype="multipart/form-data">
-  <label for="document">Seleccionar archivo:</label>
-  <input type="file" name="documents" accept=".pdf, .doc, .docx">
-  <button type="submit">Subir archivo</button>
-</form>
+      <p>
+        <strong>Email:</strong> {{user.email}} <br />
+        <strong>Edad:</strong> {{user.age}}<br />
+        <strong>Rol:</strong> {{user.rol}}
+      </p>
 
+      <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+        Subir Archivos
+      </button>
 
-<form action="/api/users/{{userId}}/documents" method="POST" enctype="multipart/form-data">
-  <label for="profileImage">Seleccionar imagen de perfil:</label>
-  <input type="file" name="profile" accept="image/*">
-  <button type="submit">Subir imagen de perfil</button>
-</form>
+      <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="staticBackdropLabel">Subida de Archivos</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <form action="/api/users/{{userId}}/documents" method="POST" enctype="multipart/form-data">
+                <label for="document" class="form-label">Seleccionar archivo:</label>
+                <input type="file" class="form-control mb-3" name="documents" accept=".pdf, .doc, .docx">
+                <button type="submit" class="btn btn-info">Subir archivo</button>
+              </form>
+              <form action="/api/users/{{userId}}/documents" method="POST" enctype="multipart/form-data">
+                <label for="profileImage" class="form-label">Seleccionar imagen de perfil:</label>
+                <input type="file" class="form-control mb-3" name="profile" accept="image/*">
+                <button type="submit" class="btn btn-info">Subir imagen de perfil</button>
+              </form>
+              <form action="/api/users/{{userId}}/documents" method="POST" enctype="multipart/form-data">
+                <label for="products" class="form-label">Seleccionar una imagen de producto:</label>
+                <input type="file" class="form-control mb-3" name="product" accept="image/*">
+                <button type="submit" class="btn btn-info">Subir imagen de producto</button>
+              </form>
 
-<form action="/api/users/{{userId}}/documents" method="POST" enctype="multipart/form-data">
-  <label for="products">Seleccionar una imagen de producto:</label>
-  <input type="file" name="product" accept="image/*">
-  <button type="submit">Subir imagen de producto</button>
-</form>
+            </div>
+          </div>
+        </div>
+      </div>
+      {{#if (eq user.rol "admin")}}
+      <a href="/admin/users" class="btn btn-success mt-2 mb-2">Cambio de Roles de Administrador</a>
+      {{/if}}
+      {{#if (eq user.rol "premium")}}
+      <a href="/api/users/premium/{{userId}}" class="btn btn-success mt-2 mb-2">Cambiar de Rol</a>
+      {{/if}}
+      {{#if (eq user.rol "usuario")}}
+      <a href="/api/users/premium/{{userId}}" class="btn btn-success mt-2 mb-2">Cambiar de Rol</a>
+      {{/if}}
+    </div>
+    <div class="col-6">
+      <h3>Carrito</h3>
+      {{#if user.cart.products}}
+      <ul class="list-group">
+        {{#each user.cart.products}}
+        <li class="list-group-item">
+          <strong>Id del producto:</strong> {{{this.product._id}}}<br />
+          <strong>Nombre del producto:</strong> {{{this.product.title}}}<br />
+          <strong>Precio del producto:</strong> {{{this.product.price}}}<br />
+          <strong>Cantidad:</strong> {{this.quantity}}
+        </li>
+        {{/each}}
+      </ul>
+      {{else}}
+      <p>No tienes productos en tu carrito.</p>
+      {{/if}}
 
-<hr>
+      <p><strong>Id del carrito:</strong>{{cartId}}</p>
 
-
-
-
-
-<form action="/api/users/premium/{{userId}}" method="GET">
-  <button type="submit">Cambiar de rol</button>
-</form>
-
-<h3>Carrito</h3>
-{{#if user.cart.products}}
-<ul>
-  {{#each user.cart.products}}
-  <li>
-    <strong>Id del producto:</strong> {{{this.product._id}}}<br />
-    <strong>Nombre del producto:</strong> {{{this.product.title}}}<br />
-    <strong>Precio del producto:</strong> {{{this.product.price}}}<br />
-    <strong>Cantidad:</strong> {{this.quantity}}
-  </li>
-  {{/each}}
-</ul>
-{{else}}
-<p>No tienes productos en tu carrito.</p>
-{{/if}}
-
-<p><strong>Id del carrito:</strong>{{cartId}}</p>
-
-<form action="/cart/{{cartId}}/purchase" method="POST">
-  <button type="submit">Realizar la compra</button>
-</form><br>
-
-<button><a href="/products">Ver todos los productos</a></button>
+      <form action="/cart/{{cartId}}/purchase" method="POST">
+        <button type="submit" class="btn btn-primary mt-2 mb-2">Realizar la compra</button>
+        <a href="/products" class="btn btn-success mt-2 mb-2">Ver todos los productos</a>
+      </form>
+    </div>
+  </div>
+  </div>
+</body>

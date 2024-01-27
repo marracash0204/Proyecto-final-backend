@@ -1,32 +1,30 @@
 <html>
 
-<head>
-  <title>Administración de Usuarios</title>
-</head>
-
-<body>
-  <h1>Administración de Usuarios</h1>
+<body class="container-fluid">
+  <a href="/profile" class="btn btn-success mt-2 mb-2">Regresar al Profile</a>
+  <h1 class="text-center">Administración de Usuarios</h1>
 
   <table>
     <tbody>
       {{#each users}}
-      <ul>
-        <li>Id de usuario: {{_id}}</li>
-        <li>Rol de usuario: {{rol}}</li>
-        <li>
+      <ul class="list-group">
+        <li class="list-group-item"><strong>Id de Usuario: </strong>{{_id}}</li>
+        <li class="list-group-item"><strong>Nombre de Usuario: </strong>{{email}}</li>
+        <li class="list-group-item"><strong>Rol de Usuario: </strong>{{rol}}</li>
+        <li class="list-group-item mb-5">
           <form action="/api/admin/users/{{_id}}" method="post">
-            <label for="newRole">Selecciona un nuevo rol:</label>
-            <select name="newRole" id="newRole">
+            <label for="newRole" class="form-label"><strong>Selecciona un Nuevo Rol:</strong></label>
+            <select class="form-select" name="newRole" id="newRole">
               <option value="usuario" {{#if (eq rol "usuario" )}}selected{{/if}}>Usuario</option>
               <option value="premium" {{#if (eq rol "premium" )}}selected{{/if}}>Premium</option>
-              <option value="admin" {{#if (eq rol "admin" )}}selected{{/if}}>admin</option>
+              <option value="admin" {{#if (eq rol "admin" )}}selected{{/if}}>Admin</option>
             </select>
-            <button type="submit">Cambiar Rol</button>
+            <button type="submit" class="btn btn-primary mt-2 mb-2">Cambiar Rol</button>
           </form>
 
           <form action="/api/admin/users/{{_id}}/delete" method="post"
             onsubmit="return confirm('¿Estás seguro de que deseas eliminar este usuario?');">
-            <button type="submit">Eliminar</button>
+            <button type="submit" class="btn btn-primary mt-2 mb-2">Eliminar Usuario</button>
           </form>
         </li>
       </ul>

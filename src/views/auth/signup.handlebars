@@ -1,8 +1,32 @@
-<form action="/api/signup" method="post">
-    <input type="text" name="first_name" placeholder="nombre">
-    <input type="text" name="last_name" placeholder="apellido">
-    <input type="email" name="email" placeholder="email">
-    <input type="number" name="age" placeholder="edad">
-    <input type="text" name="password" placeholder="clave">
-    <button value="submit">Registrarme</button>
-</form>
+
+
+<h2 class="text-center mb-3 mt-5">Registro</h2>
+<div class="d-flex justify-content-center align-items-center">
+    <form action="/api/signup" method="post">
+    <div class="row">
+        <div class="mb-3 col-6">
+            <label for="first_name" class="form-label">Nombre</label>
+            <input type="text" class="form-control" name="first_name" placeholder="Nombre">
+        </div>
+        <div class="mb-3 col-6">
+            <label for="last_name" class="form-label">Apellido</label>
+            <input type="text" class="form-control" name="last_name" placeholder="Apellido">
+        </div>
+    </div>
+    <div class="row">    
+        <div class="mb-3 col-6">
+            <label for="email" class="form-label">Email</label>
+            <input type="email" class="form-control" name="email" placeholder="Email">
+        </div>
+        <div class="mb-3 col-6">
+            <label for="age" class="form-label">Edad</label>
+            <input type="number" class="form-control" name="age" placeholder="Edad">
+        </div>
+    </div>    
+        <div class="mb-3">
+            <label for="password" class="form-label">Contraseña</label>
+            <input type="text" class="form-control" name="password" placeholder="Contraseña">
+        </div>
+        <button value="submit" class="btn btn-info">Registrarme</button>
+    </form>
+</div>
